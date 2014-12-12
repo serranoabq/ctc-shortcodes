@@ -81,13 +81,14 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 				'paged' 					=> $paged,
 				'order' 					=> 'ASC'
 			) ; 
+			// get query
 			$posts = new WP_Query();
 			$posts -> query( $args ); 
 			
-			ob_start();
+			ob_start();  // we'll buffer the results to use templates
 			if( '' != $template ){
 				// template contains the loop
-				// 
+				// the templates would be stored from within a theme
 				require( $template );
 			} else {
 				// this is a generic loop with most of the meta data in the various cpt
@@ -96,6 +97,10 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 						$posts -> the_post(); 
 						$post_id 	= get_the_ID();
 						$thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id(), $thumb_size );
+						
+						// First need to extract all relevant metadata from the CPT
+						// Note that this is basically trying to extract ALL available data from
+						// ALL cpt. In the templates one would use only the one relevant to that CPT.
 						
 						// Person data
 						$per_position = get_post_meta( $post_id, '_ctc_person_position' , true ); 
@@ -174,9 +179,9 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 							<?php if( $ser_video ): ?><div class="ctc-video"><?php do_shortcode($ser_video); ?></div><?php endif; ?>
 							<?php if( $ser_audio ): ?><div class="ctc-audio"><?php do_shortcode($ser_audio); ?></div><?php endif; ?>
 <?php // Person ?>							
+							<?php if( $per_position ): ?><div class="ctc-position"><i><?php echo $per_position; ?></i></div><?php endif; ?>
 							<?php if( $per_phone ): ?><div class="ctc-phone"><i class="fa-mobile icon-mobile-phone"></i><?php echo $per_phone; ?></div><?php endif; ?>
-							<?php if( $per_phone ): ?><div class="ctc-phone"><i class="fa-mobile icon-mobile-phone"></i><?php echo $per_phone; ?></div><?php endif; ?>
-							<?php if( $per_phone ): ?><div class="ctc-phone"><i class="fa-mobile icon-mobile-phone"></i><?php echo $per_phone; ?></div><?php endif; ?>
+							<?php if( $per_email ): ?><div class="ctc-email"><i class="fa-envelope icon-envelope"></i><?php echo $per_email; ?></div><?php endif; ?>
 <?php // Location ?>							
 							<?php if( $loc_address ): ?><div class="ctc-location"><i class="fa-map-marker icon-map-marker"></i><?php echo $loc_address; ?></div><?php endif; ?>
 							<?php if( $loc_show_loc && $loc_address): ?>
@@ -196,16 +201,16 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 <?php 
 							switch ( $evt_recurrence ) {
 								case 'daily' : 
-									printf(_n('Recurs Daily','Recurs Every %d Days',(int)$evt_recur_period, 'church-theme-content'), (int)$evt_recur_period);
+									printf(_n('Recurs Daily','Recurs Every %d Days',(int)$evt_recur_period, 'ctc-shortcodes'), (int)$evt_recur_period);
 								break;
 							case 'weekly' :
-									printf(_n('Recurs Weekly','Recurs Every %d Weeks',(int)$evt_recur_period, 'church-theme-content'), (int)$evt_recur_period);
+									printf(_n('Recurs Weekly','Recurs Every %d Weeks',(int)$evt_recur_period, 'ctc-shortcodes'), (int)$evt_recur_period);
 								break;
 							case 'monthly' :
-								printf(_n('Recurs Monthly','Recurs Every %d Months',(int)$evt_recur_period, 'church-theme-content'), (int)$evt_recur_period);
+								printf(_n('Recurs Monthly','Recurs Every %d Months',(int)$evt_recur_period, 'ctc-shortcodes'), (int)$evt_recur_period);
 								break;
 							case 'yearly' :
-								printf(_n('Recurs Yearly','Recurs Every %d Years',(int)$evt_recur_period, 'church-theme-content'), (int)$evt_recur_period);
+								printf(_n('Recurs Yearly','Recurs Every %d Years',(int)$evt_recur_period, 'ctc-shortcodes'), (int)$evt_recur_period);
 								break;
 							} // switch
 ?>
@@ -227,10 +232,10 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 				$has_next = $posts->max_num_pages > $paged;
 				$has_prev = $paged > 1;
 ?>
-	<div class="ctc-person-nav">
-		<a class="ctc-prev" <?php echo ($has_prev ? 'href="' . add_query_arg( 'paged', $paged-1, $parent_url ): '' ) ; ?>"> Previous</a>
-		<a class="ctc-next " <?php echo ($has_next ? 'href="'. add_query_arg( 'paged', $paged+1, $parent_url ): '' ) ; ?>">Next</a>
-	</div>
+						<div class="ctc-person-nav">
+							<a class="ctc-prev" <?php echo ($has_prev ? 'href="' . add_query_arg( 'paged', $paged-1, $parent_url ): '' ) ; ?>"><?php __( 'Previous', 'ctc-shortcodes' ); ?></a>
+							<a class="ctc-next " <?php echo ($has_next ? 'href="'. add_query_arg( 'paged', $paged+1, $parent_url ): '' ) ; ?>"><?php __( 'Next', 'ctc-shortcodes' ); ?></a>
+						</div>
 <?php				
 			} //else
 			
@@ -238,6 +243,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			$output = ob_get_clean();
 			
 			return $before . $output . $after;
+			
 		}
 		
 		function tax_shortcode ( $type, $attr ) {
