@@ -1,11 +1,13 @@
 <?php
-// Series template
+// Sermon template
 // Defined constants in previous scope
 // $post_id, $thumbnail, $type, $use_permalink, $count, $paged
 
 // Sermon data
-$series = get_terms( '_ctc_sermon_series');
-
+$ser_video = get_post_meta( $post_id, '_ctc_sermon_video' , true ); 
+$ser_audio = get_post_meta( $post_id, '_ctc_sermon_audio' , true ); 
+$ser_pdf = get_post_meta( $post_id, '_ctc_sermon_pdf' , true ); 
+$series = get_the_terms( $post_id, '_ctc_sermon_series');
 if( $series && ! is_wp_error( $series) ) {
 	$series = array_shift( array_values ( $series ) );
 	$ser_series = $series -> name;
@@ -36,6 +38,14 @@ if( $tags && ! is_wp_error( $tags ) ) {
 } else {
 	$ser_tags = '';
 }
+$topics = get_the_terms( $post_id, '_ctc_sermon_topic');
+if( $topics && ! is_wp_error( $topics ) ) {
+	$topics_A = array();
+	foreach ( $topics as $topic ) { $topics_A = $topic -> name; }
+	$ser_topics = join( ', ', $topics_A );
+} else {
+	$ser_topics = '';
+}
 
 ?>
 	<div class="ctc-block ctc-<?php echo $type;?>">
@@ -55,6 +65,9 @@ if( $tags && ! is_wp_error( $tags ) ) {
 <?php endif; ?>
 <?php if( $ser_series ): ?>
 		<div class="ctc-series"><i class="fa-th-large icon-th-large"></i><?php echo $ser_series; ?></div>
+<?php endif; ?>
+<?php if( $ser_topic ): ?>
+		<div class="ctc-topics"><i class="fa-th-large icon-th-large"></i><?php echo $ser_topics; ?></div>
 <?php endif; ?>
 <?php if( $ser_tags ): ?>
 		<div class="ctc-tags"><i class="fa-th-large icon-th-large"></i><?php echo $ser_tags; ?></div>
