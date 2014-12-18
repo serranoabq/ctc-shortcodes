@@ -19,7 +19,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			add_shortcode( 'ctc_topics', array( &$this, 'topics_shortcode' ) ); 				// Topics List
 			add_shortcode( 'ctc_tags', array( &$this, 'tags_shortcode' ) ); 				// Tags List
 			add_shortcode( 'ctc_tags', array( &$this, 'books_shortcode' ) ); 				// Books List
-			add_shortcode( 'ctc_serieslist', array( &$this, 'series_list_shortcode' ) ); 				// Series List
+			add_shortcode( 'ctc_series_list', array( &$this, 'series_list_shortcode' ) ); 				// Series List
 			
 			// Taxonomy Archives
 			add_shortcode( 'ctc_group', array( &$this, 'group_shortcode' ) ); 					// Group of people
@@ -29,13 +29,12 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			add_shortcode( 'ctc_speaker', array( &$this, 'speaker_shortcode' ) ); 					// Group of people
 			add_shortcode( 'ctc_book', array( &$this, 'book_shortcode' ) ); 					// Group of people
 			
-			/*
-      
-      add_shortcode( 'ctc_sermon', array( &$this, 'sermon_shortcode' ) );					// Single Sermon 
+			// Single posts
+			add_shortcode( 'ctc_sermon', array( &$this, 'sermon_shortcode' ) );					// Single Sermon 
 			add_shortcode( 'ctc_event', array( &$this, 'event_shortcode' ) );						// Single Event
 			add_shortcode( 'ctc_person', array( &$this, 'person_shortcode' ) );					// Single Person
 			add_shortcode( 'ctc_location', array( &$this, 'location_shortcode' ) );			// Single Location
-			*/
+			
 		}
 		
 		// CPT Archvies
@@ -44,6 +43,12 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 		public function sermons_shortcode( $attr ) { return $this->cpt_shortcode( 'sermon', $attr ); }
 		public function locations_shortcode( $attr ) { return $this->cpt_shortcode( 'location', $attr ); }
     
+		// CPT Single
+    public function person_shortcode( $attr ) { return $this->single_shortcode( 'person', $attr ); }
+		public function event_shortcode( $attr ) { return $this->single_shortcode( 'event', $attr ); }
+		public function sermon_shortcode( $attr ) { return $this->single_shortcode( 'sermon', $attr ); }
+		public function location_shortcode( $attr ) { return $this->single_shortcode( 'location', $attr ); }
+		
 		// Taxonomy Lists
 		public function groups_shortcode( $attr ) { return $this->taxlist_shortcode( 'group_list', $attr ); }
 		public function series_list_shortcode( $attr ) { return $this->taxlist_shortcode( 'series_list', $attr ); }
@@ -60,6 +65,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 		public function book_shortcode( $attr ) { return $this->tax_shortcode( 'book', $attr ); }
 		public function series_shortcode( $attr ) { return $this->tax_shortcode( 'series', $attr ); }
 		
+		//
 		
     
 /**
@@ -194,7 +200,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 					$cpt = 'ctc_sermon';
 					$tax = 'ctc_sermon_book';
 					break;
-				case 'speaker+list':
+				case 'speaker_list':
 					$cpt = 'ctc_sermon';
 					$tax = 'ctc_sermon_speaker';
 					break;
@@ -245,7 +251,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 				$term_link = get_term_link( intval( $term->term_id ), $tax )
 				if( function_exists( 'ctc_taxonomy_img_url' )
 					$thumbnail = ctc_taxonomy_img_url( intval( $term->term_id ) );
-				if( '' != $template ){ require( $template ); }
+				require( $template ); 
 			}
 			if( '' != $pag_template ){ require( $pag_temaplte ); }
 			$output = ob_get_clean();
@@ -265,44 +271,48 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
  *    @param string $thumb_size Image size to use: 'thumbnail', 'large', 'medium', 'small' or any other size defined by a theme or plugin. Only works with modified CTC plugin (Default = 'thumbnail')
  *    @param bool 	$link_title Flag to determine if the title should link to a page. This only makes sense if the theme supports it. (Default = false)
  */			
-		public function tax_shortcode ( $gmtype, $attr ) {
+		public function tax_shortcode ( $type, $attr ) {
 			switch ( $type ) {
 				case 'group':
 					$cpt = 'ctc_person';
 					$tax = 'ctc_person_group';
-					$type = 'people';
+					$type = 'person';
 					break;
 				case 'series':
 					$cpt = 'ctc_sermon';
 					$tax = 'ctc_sermon_series';
-					$type = 'sermons';
+					$type = 'sermon';
 					break;
 				case 'book':
 					$cpt = 'ctc_sermon';
 					$tax = 'ctc_sermon_book';
-					$type = 'sermons';
+					$type = 'sermon';
 					break;
 				case 'speaker':
 					$cpt = 'ctc_sermon';
 					$tax = 'ctc_sermon_speaker';
-					$type = 'sermons';
+					$type = 'sermon';
 					break;
 				case 'tag':
 					$cpt = 'ctc_sermon';
 					$tax = 'ctc_sermon_tag';
-					$type = 'sermons';
+					$type = 'sermon';
 					break;
 				case 'topic':
 					$cpt = 'ctc_sermon';
 					$tax = 'ctc_sermon_topic';
-					$type = 'sermons';
+					$type = 'sermon';
 					break;
 				default:
 					return '';
 			}
 			
 			$template_location = 'ctc-shortcodes-inc/';
-			$template = $this->ctc_locate_template( $template_location . $type );
+			$template = $this->ctc_locate_template( array(
+				$template_location . 'tax_archive', 
+				$template_location . $type . '_tax', 
+				$template_location . $type, 
+			) );
 			if( empty( $template ) ) return '';
 			
 			$pag_template = $this->ctc_locate_template( $template_location . 'pagination' );
@@ -322,7 +332,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			
 			$parent_url = get_permalink();
       $use_permalink = $link_title OR current_theme_supports( 'church-theme-content' );
-			$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+			$paged = ( get_query_var( $type. '_paged' ) ) ? get_query_var( $type . '_paged' ) : 1;
 			
 			// Setup the query
 			$args = array(
@@ -352,8 +362,86 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			
 		}
 		
-		function single_shortcode ( $type, $attr ) {
-		
+/**
+ * Shortcode handler for a single item
+ *
+ * @since 0.1
+ * @param string $type The type of post to show: 'person', 'location', 'event', 'sermon'
+ * @param mixed $args Shortcode arguments
+ *    @param string $before Text to prepend the shortcode output with. (Default '')
+ *    @param string $after Text to apend to the shortcode output. (Default '')
+ *    @param string $name Name (slug) of post to display (either this or $id must be specified)
+ *    @param mixed 	$id ID of the post to display (either this or $name must be specified)
+ *    @param string $thumb_size Image size to use: 'thumbnail', 'large', 'medium', 'small' or any other size defined by a theme or plugin. Only works with modified CTC plugin (Default = 'thumbnail')
+ *    @param bool 	$link_title Flag to determine if the title should link to a page. This only makes sense if the theme supports it. (Default = false)
+ */			
+		public function single_shortcode ( $type, $attr ) {
+			switch ( $type ) {
+				case 'location':
+					$cpt = 'ctc_location';
+					break;
+				case 'sermon':
+					$cpt = 'ctc_sermon';
+					break;
+				case 'person':
+					$cpt = 'ctc_event';
+					break;
+				case 'event':
+					$cpt = 'ctc_event';
+					break;
+				default:
+					return '';
+			}
+			
+			$template_location = 'ctc-shortcodes-inc/';
+			$template = $this->ctc_locate_template( array( 
+				$template_location . $type, 
+				$template_location . $type . '_single', 
+				) );
+			if( empty( $template ) ) return '';
+			
+			// Parse the arguments
+			extract( shortcode_atts( array(
+				'before' 			=>	'',					// Prepend content
+				'after' 			=>	'',					// Append content
+				'name' 				=>	'',					// Post slug
+				'id'					=> 	'',					// Post ID
+				'thumb_size' 	=> 'thumbnail',	// Image size to use by name
+				'link_title'	=> false, 			// Link the title to a page
+			), $attr ) );
+
+			$parent_url = get_permalink();
+      $use_permalink = $link_title OR current_theme_supports( 'church-theme-content' );
+			
+			// Either name or ID are required
+			if( empty( $id ) && empty( $name ) ) return '';
+			
+			// Setup the query
+			$args = array(
+				'post_type' 			=> $cpt, 
+      ) ; 
+			
+			if( $id ) 
+				$args[ 'p' ] = $id;
+			else
+				$args[ 'name' ] = $name;
+				
+			// get query
+			$posts = new WP_Query( $args );
+			ob_start();  // we'll buffer the results to use templates
+			if( $posts->have_posts() ){
+				while( $posts->have_posts() ){
+					$posts -> the_post(); 
+					$post_id 	= get_the_ID();
+					$thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id(), $thumb_size );
+					require ( $template );	
+				}
+			}
+			
+			wp_reset_postdata();
+			$output = ob_get_clean();			
+			return $before . $output . $after;
+			
     }
 		
 
