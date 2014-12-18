@@ -21,60 +21,54 @@ Usage
 The plugin makes available several shortcodes to expose and display the content associated with the CTC plugin. There are basically four sets of shortcodes: *type archives, taxonomy archives, taxonomy lists, and single posts*. **Type archives** are a listing of all posts of a given type, including their associated meta data. **Taxonomy archives** are a listing of all posts of a given taxonomy. **Taxonomy lists** are a listing of all available taxonomies. **Single posts** are a way of including a single post of a given type. 
 
 Type archives
-`[ctc_people]`
-`[ctc_events]`
-`[ctc_sermons]`
-`[ctc_locations]`
-
+```
+[ctc_people]
+[ctc_events]
+[ctc_sermons]
+[ctc_locations]
+```
 Taxonomy archive
-`[ctc_group name='']`
-`[ctc_topic name='']`
-`[ctc_tag name='']`
-`[ctc_series name='']`
-`[ctc_speaker name='']`
-`[ctc_book name='']`
-
+```
+[ctc_group name='']
+[ctc_topic name='']
+[ctc_tag name='']
+[ctc_series name='']
+[ctc_speaker name='']
+[ctc_book name='']
+```
 Taxonomy lists
-`[ctc_groups]`
-`[ctc_speakers]`
-`[ctc_books]`
-`[ctc_tags]`
-`[ctc_topics]`
-`[ctc_series_list]`
-
+```
+[ctc_groups]
+[ctc_speakers]
+[ctc_books]
+[ctc_tags]
+[ctc_topics]
+[ctc_series_list]
+```
 Single post
-`[ctc_event name=''|id='']`
-`[ctc_sermon name=''|id='']`
-`[ctc_location name=''|id='']`
-`[ctc_person name=''|id='']`
+```
+[ctc_event name=''|id='']
+[ctc_sermon name=''|id='']
+[ctc_location name=''|id='']
+[ctc_person name=''|id='']
+```
 
-Options
-before|after 	Text to prepend and/or append to the output. Default: ''
-count					Number of items to display for the list and archives. 
-							If specified, the display will allow pagination. 
-							Default: all
-thumb_size		String specifying the size of the image to display. 
-							Typical values include 'thumbnail', 'large', 'medium', 'small'. 
-							However, a theme can also define other size names. 
-							Default: 'thumbnail'
-link_title		Boolean flag specifying whether the title of an item should 
-							link to its page. 
-							Default: false.
-name					For taxonomy archive. Slug name of the taxonomy term to display.
-name					For single post shortcodes. Slug name of the post to display.
-							Either this or 'id' must be specified
-id						For single post shortcodes only. Post ID of the post to display.
-							Either this or 'name' must be specified
+###Options###
+| Parameter 		| Definition 
+|---------------|-------------
+| before/after 	| Text to prepend and/or append to the output. Default: ''
+| count 				| Number of items to display for the list and archives. If specified, the display will allow pagination. Default: all
+| thumb_size		| String specifying the size of the image to display. Typical values include 'thumbnail', 'large', 'medium', 'small'. However, a theme can also define other size names. Default: 'thumbnail'
+| link_title		| Boolean flag specifying whether the title of an item should link to its page. Default: false.
+| name					| For taxonomy archive, it is the slug name of the taxonomy term to display. For single post shortcodes, it is the slug name of the post to display, and either this or 'id' must be specified
+| id						| For single post shortcodes only. Post ID of the post to display. Either this or 'name' must be specified
+			
 
 
-Notes:
-1. 	Pagination is supported but gets complicated especially if there are multiple 
-		shortcodes on the page, all of which need pagination
-2. 	The link_title flag works best if the theme is designed to support the 
-		Church Theme Content plugin (i.e., with an appropriate post type template). 
-		Otherwise, the title link would be to a plain page which lacks the ability 
-		to display the meta data associated with the various post types.
-		
+###Notes:###
+1. Pagination is supported but gets complicated especially if there are multiple shortcodes on the page, all of which need pagination
+2. The link_title flag works best if the theme is designed to support the Church Theme Content plugin (i.e., with an appropriate post type template). Otherwise, the title link would be to a plain page which lacks the ability to display the meta data associated with the various post types.
+
 
 
 Notes
