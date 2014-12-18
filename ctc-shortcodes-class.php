@@ -88,12 +88,13 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 				} else if ( file_exists(TEMPLATEPATH . '/' . $template_name) ) {
 					$located = TEMPLATEPATH . '/' . $template_name;
 					break;
-				else 
+				} else {
 					$located = $template_name; 
 				}
 			}
 
-			if ( $load && '' != $located ) load_template( $located, $require_once );
+			if ( $load && '' != $located ) 
+				load_template( $located, $require_once );
 		
 			return $located;
 		}
@@ -248,8 +249,8 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 				ob_start();  // we'll buffer the results to use templates
 				$term_title = $term->name;
 				$term_desc = term_description( intval( $term->term_id ), $tax );
-				$term_link = get_term_link( intval( $term->term_id ), $tax )
-				if( function_exists( 'ctc_taxonomy_img_url' )
+				$term_link = get_term_link( intval( $term->term_id ), $tax ); 
+				if( function_exists( 'ctc_taxonomy_img_url' ) )
 					$thumbnail = ctc_taxonomy_img_url( intval( $term->term_id ) );
 				require( $template ); 
 			}
