@@ -8,33 +8,43 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			if ( ! class_exists( 'Church_Theme_Content' ) ) return;
 			
 			// CPT Archives
-			add_shortcode( 'ctc_people', array( &$this, 'people_shortcode' ) ); 				// People archive
-			add_shortcode( 'ctc_events', array( &$this, 'events_shortcode' ) ); 				// Events archive
-			add_shortcode( 'ctc_sermons', array( &$this, 'sermons_shortcode' ) );				// Sermon archive
-			add_shortcode( 'ctc_locations', array( &$this, 'locations_shortcode' ) );		// Locations archive
+			add_shortcode( 'ctc_people', array( &$this, 'people_shortcode' ) );
+			add_shortcode( 'ctc_events', array( &$this, 'events_shortcode' ) );
+			add_shortcode( 'ctc_sermons', array( &$this, 'sermons_shortcode' ) );
+			add_shortcode( 'ctc_locations', array( &$this, 'locations_shortcode' ) );
 			
 			// Taxonomy lists
-			add_shortcode( 'ctc_groups', array( &$this, 'groups_shortcode' ) ); 				// Groups List
-			add_shortcode( 'ctc_speakers', array( &$this, 'speakers_shortcode' ) ); 				// Speakers List
-			add_shortcode( 'ctc_topics', array( &$this, 'topics_shortcode' ) ); 				// Topics List
-			add_shortcode( 'ctc_tags', array( &$this, 'tags_shortcode' ) ); 				// Tags List
-			add_shortcode( 'ctc_tags', array( &$this, 'books_shortcode' ) ); 				// Books List
-			add_shortcode( 'ctc_series_list', array( &$this, 'series_list_shortcode' ) ); 				// Series List
+			add_shortcode( 'ctc_groups', array( &$this, 'groups_shortcode' ) );
+			add_shortcode( 'ctc_speakers', array( &$this, 'speakers_shortcode' ) );
+			add_shortcode( 'ctc_topics', array( &$this, 'topics_shortcode' ) );
+			add_shortcode( 'ctc_tags', array( &$this, 'tags_shortcode' ) );
+			add_shortcode( 'ctc_books', array( &$this, 'books_shortcode' ) );
+			add_shortcode( 'ctc_series_list', array( &$this, 'series_list_shortcode' ) );
 			
 			// Taxonomy Archives
-			add_shortcode( 'ctc_group', array( &$this, 'group_shortcode' ) ); 					// Group of people
-			add_shortcode( 'ctc_topic', array( &$this, 'topic_shortcode' ) ); 					// Group of people
-			add_shortcode( 'ctc_tag', array( &$this, 'tag_shortcode' ) ); 					// Group of people
-			add_shortcode( 'ctc_series', array( &$this, 'series_shortcode' ) ); 					// Group of people
-			add_shortcode( 'ctc_speaker', array( &$this, 'speaker_shortcode' ) ); 					// Group of people
-			add_shortcode( 'ctc_book', array( &$this, 'book_shortcode' ) ); 					// Group of people
+			add_shortcode( 'ctc_group', array( &$this, 'group_shortcode' ) ); 
+			add_shortcode( 'ctc_topic', array( &$this, 'topic_shortcode' ) ); 
+			add_shortcode( 'ctc_tag', array( &$this, 'tag_shortcode' ) ); 
+			add_shortcode( 'ctc_series', array( &$this, 'series_shortcode' ) ); add_shortcode( 'ctc_speaker', array( &$this, 'speaker_shortcode' ) ); 
+			add_shortcode( 'ctc_book', array( &$this, 'book_shortcode' ) );
 			
 			// Single posts
-			add_shortcode( 'ctc_sermon', array( &$this, 'sermon_shortcode' ) );					// Single Sermon 
-			add_shortcode( 'ctc_event', array( &$this, 'event_shortcode' ) );						// Single Event
-			add_shortcode( 'ctc_person', array( &$this, 'person_shortcode' ) );					// Single Person
-			add_shortcode( 'ctc_location', array( &$this, 'location_shortcode' ) );			// Single Location
+			add_shortcode( 'ctc_sermon', array( &$this, 'sermon_shortcode' ) );
+			add_shortcode( 'ctc_event', array( &$this, 'event_shortcode' ) );
+			add_shortcode( 'ctc_person', array( &$this, 'person_shortcode' ) );
+			add_shortcode( 'ctc_location', array( &$this, 'location_shortcode' ) );
 			
+			// Add styles
+			add_action( 'wp_enqueue_scripts', array( &$this, 'ctc_styles' ) );
+		}
+		
+/**
+ * Add styles
+ *
+ * @since 1.0.1
+ */
+		function ctc_styles(){
+			wp_register_style( 'ctc-style' , $this->ctc_locate_template_url( 'ctc-shortcodes-inc/style.css' ), __FILE__ );
 		}
 		
 		// CPT Archvies
@@ -65,14 +75,13 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 		public function book_shortcode( $attr ) { return $this->tax_shortcode( 'book', $attr ); }
 		public function series_shortcode( $attr ) { return $this->tax_shortcode( 'series', $attr ); }
 		
-		//
 		
     
 /**
  * Locate a template file. Similar to the @locate_template WordPress function, 
  * but also searches in the plugin directory
  *
- * @since 0.1
+ * @since 1.0
  * @param string $template_names Array of strings with templates to locate
  * @param bool $load Flag to load the template. (Default false)
  * @param bool $load Flag to load the template only one (Default true)
@@ -81,15 +90,54 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 		public function ctc_locate_template( $template_names, $load = false, $require_once = true) {
 			$located = '';
 			foreach ( (array) $template_names as $template_name ) {
-				if ( !$template_name ) continue;
-				if ( file_exists(STYLESHEETPATH . '/' . $template_name)) {
-					$located = STYLESHEETPATH . '/' . $template_name;
+				if( !$template_name ) continue;
+				if( file_exists( get_stylesheet_directory() . '/' . $template_name)) {
+					// Child
+					$located = get_stylesheet_directory() . '/' . $template_name;
 					break;
-				} else if ( file_exists(TEMPLATEPATH . '/' . $template_name) ) {
-					$located = TEMPLATEPATH . '/' . $template_name;
+				} elseif( file_exists( get_template_directory() . '/' . $template_name) ) {
+					// Parent
+					$located = get_template_directory() . '/' . $template_name;
 					break;
-				} else {
+				} elseif( file_exists( dirname(__FILE__). '/' . $template_name ) ) {
+					// Plugin
 					$located = dirname(__FILE__). '/' . $template_name; 
+					break;
+				}
+			}
+
+			if ( $load && '' != $located ) 
+				load_template( $located, $require_once );
+		
+			return $located;
+		}
+
+/**
+ * Locate a template file URL. Similar to the @locate_template WordPress function, 
+ * but also searches in the plugin directory
+ *
+ * @since 1.0.1
+ * @param string $template_names Array of strings with templates to locate
+ * @param bool $load Flag to load the template. (Default false)
+ * @param bool $load Flag to load the template only one (Default true)
+ * @return string path to the template file located (it will return the last one located)
+ */
+		public function ctc_locate_template_url( $template_names, $load = false, $require_once = true) {
+			$located = '';
+			foreach ( (array) $template_names as $template_name ) {
+				if ( !$template_name ) continue;
+				if ( file_exists( get_stylesheet_directory_uri() . '/' . $template_name)) {
+					// Child
+					$located = get_stylesheet_directory_uri() . '/' . $template_name;
+					break;
+				} else if ( file_exists( get_template_directory_uri() . '/' . $template_name) ) {
+					// Parent
+					$located = get_template_directory_uri() . '/' . $template_name;
+					break;
+				} elseif( plugins_url( $template_name, __FILE__ ) ) {
+					// Plugin
+					$located = plugins_url( $template_name, __FILE__ ); 
+					break;
 				}
 			}
 
@@ -102,7 +150,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 /**
  * Shortcode handler for a custom post type archive
  *
- * @since 0.1
+ * @since 1.0.1
  * @param string $type The type of CPT to show: 'locations', 'events', 'sermons', 'people'
  * @param mixed $args Shortcode arguments
  *    @param string $before Text to prepend the shortcode output with. (Default '')
@@ -119,7 +167,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 				case 'sermon':
 					$cpt = 'ctc_sermon';
 					break;
-				case 'person':
+				case 'event':
 					$cpt = 'ctc_event';
 					break;
 				case 'person':
@@ -144,9 +192,8 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 				'link_title'	=> false, 			// Link the title to a page
 			), $attr ) );
 
-			$parent_url = get_permalink();
-      $use_permalink = $link_title OR current_theme_supports( 'church-theme-content' );
-			$paged = ( get_query_var( $type. '_paged' ) ) ? get_query_var( $type . '_paged' ) : 1;
+			$use_permalink = $link_title OR current_theme_supports( 'church-theme-content' );
+			$paged = intval( isset( $_GET[ $type . '_paged'] )  ? $_GET[ $type . '_paged'] : 1 );
 			
 			// Setup the query
 			$args = array(
@@ -158,7 +205,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			
 			// get query
 			$posts = new WP_Query( $args );
-			ob_start();  // we'll buffer the results to use templates
+			ob_start();  
 			if( $posts->have_posts() ){
 				while( $posts->have_posts() ){
 					$posts -> the_post(); 
@@ -166,11 +213,12 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 					$thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id(), $thumb_size );
 					require( $template );
 				}
-				if( '' != $pag_template ){ require( $pag_temaplte ); }
+				if( '' != $pag_template ){ require( $pag_template ); }
 			}
 			
 			wp_reset_postdata();
 			$output = ob_get_clean();
+			wp_enqueue_style( 'ctc-style' );
 			return $before . $output . $after;
 						
 		}
@@ -178,7 +226,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 /**
  * Shortcode handler for a taxonomy term list
  *
- * @since 0.1
+ * @since 1.0
  * @param string $type The type of taxonomy to show: 'group', 'series', 'book', 'speaker', 'tag', 'topic' 
  * @param mixed $args Shortcode arguments
  *    @param string $before Text to prepend the shortcode output with. (Default '')
@@ -235,18 +283,17 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 				'link_title'	=> false, 			// Link the title to a page
 			), $attr ) );
 
-			$parent_url = get_permalink();
-      $use_permalink = $link_title OR current_theme_supports( 'church-theme-content' );
+			$use_permalink = $link_title OR current_theme_supports( 'church-theme-content' );
 			
-			$paged = ( get_query_var( $type . '_paged' ) ) ? get_query_var( $type . '_paged' ) : 1;
+			$paged = intval( isset( $_GET[ $type . '_paged'] ) ? $_GET[ $type . '_paged'] : 1 );
 			$offset = ( $paged - 1 ) * $count;
 			
 			$tax_args = array( 'number'=> $count, 'offset'=> $offset  );
 			$taxes = get_terms( $tax, $tax_args );
 			if ( empty( $taxes ) || is_wp_error( $taxes ) ) return '';
 			
+			ob_start();  
 			foreach( $taxes as $term ){
-				ob_start();  // we'll buffer the results to use templates
 				$term_title = $term->name;
 				$term_desc = term_description( intval( $term->term_id ), $tax );
 				$term_link = get_term_link( intval( $term->term_id ), $tax ); 
@@ -254,8 +301,9 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 					$thumbnail = ctc_taxonomy_img_url( intval( $term->term_id ) );
 				require( $template ); 
 			}
-			if( '' != $pag_template ){ require( $pag_temaplte ); }
+			if( '' != $pag_template ){ require( $pag_template ); }
 			$output = ob_get_clean();
+			wp_enqueue_style( 'ctc-style' );
 			return $before . $output . $after;
 		
 		}
@@ -263,7 +311,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 /**
  * Shortcode handler for a taxonomy archive
  *
- * @since 0.1
+ * @since 1.0
  * @param string $type The type of taxonomy archive to show: 'group', 'series', 'book', 'speaker', 'tag', 'topic'
  * @param mixed $args Shortcode arguments
  *    @param string $before Text to prepend the shortcode output with. (Default '')
@@ -331,9 +379,8 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			// Name is required
       if( empty( $name ) ) return '';
 			
-			$parent_url = get_permalink();
-      $use_permalink = $link_title OR current_theme_supports( 'church-theme-content' );
-			$paged = ( get_query_var( $type. '_paged' ) ) ? get_query_var( $type . '_paged' ) : 1;
+			$use_permalink = $link_title OR current_theme_supports( 'church-theme-content' );
+			$paged = intval( isset( $_GET[ $type . '_paged'] ) ? $_GET[ $type . '_paged'] : 1 );
 			
 			// Setup the query
 			$args = array(
@@ -346,7 +393,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			
 			// get query
 			$posts = new WP_Query( $args );
-			ob_start();  // we'll buffer the results to use templates
+			ob_start();  
 			if( $posts->have_posts() ){
 				while( $posts->have_posts() ){
 					$posts -> the_post(); 
@@ -354,11 +401,12 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 					$thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id(), $thumb_size );
 					require ( $template );	
 				}
-				if( '' != $pag_template ){ require( $pag_temaplte ); }
+				if( '' != $pag_template ){ require( $pag_template ); }
 			}
 			
 			wp_reset_postdata();
 			$output = ob_get_clean();			
+			wp_enqueue_style( 'ctc-style' );
 			return $before . $output . $after;
 			
 		}
@@ -366,7 +414,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 /**
  * Shortcode handler for a single item
  *
- * @since 0.1
+ * @since 1.0
  * @param string $type The type of post to show: 'person', 'location', 'event', 'sermon'
  * @param mixed $args Shortcode arguments
  *    @param string $before Text to prepend the shortcode output with. (Default '')
@@ -385,7 +433,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 					$cpt = 'ctc_sermon';
 					break;
 				case 'person':
-					$cpt = 'ctc_event';
+					$cpt = 'ctc_person';
 					break;
 				case 'event':
 					$cpt = 'ctc_event';
@@ -396,8 +444,8 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			
 			$template_location = 'ctc-shortcodes-inc/';
 			$template = $this->ctc_locate_template( array( 
-				$template_location . $type . '.php', 
 				$template_location . $type . '_single.php', 
+				$template_location . $type . '.php', 
 				) );
 			if( empty( $template ) ) return '';
 			
@@ -429,7 +477,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 				
 			// get query
 			$posts = new WP_Query( $args );
-			ob_start();  // we'll buffer the results to use templates
+			ob_start();  
 			if( $posts->have_posts() ){
 				while( $posts->have_posts() ){
 					$posts -> the_post(); 
@@ -441,6 +489,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			
 			wp_reset_postdata();
 			$output = ob_get_clean();			
+			wp_enqueue_style( 'ctc-style' );
 			return $before . $output . $after;
 			
     }

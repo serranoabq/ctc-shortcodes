@@ -15,28 +15,28 @@ if( $per_group && ! is_wp_error( $per_group ) ) {
 	$per_group = '';
 }
 ?>
-	<div class="ctc-block ctc-<?php echo $type;?>">
+<div class="ctc-block ctc-person">
 <?php if( $thumbnail ): ?>
-		<img src="<?php echo $thumbnail[0]; ?>" class="ctc-img"/>
+	<img src="<?php echo $thumbnail[0]; ?>" class="ctc-img"/>
 <?php endif; ?>									
 <?php if( $use_permalink ): ?>
-		<div class="ctc-title"><?php echo get_the_title(); ?></div>
+	<div class="ctc-title"><?php echo get_the_title(); ?></div>
 <?php else: ?>
-		<div class="ctc-title"><a href="<?php echo get_permalink(); ?>"><?php echo get_the_title(); ?></a></div>
+	<div class="ctc-title"><a href="<?php echo get_permalink(); ?>"><?php echo get_the_title(); ?></a></div>
 <?php endif; ?>
 <?php if( $per_position ): ?>
-		<div class="ctc-position"><i><?php echo $per_position; ?></i></div>
+	<div class="ctc-position"><i><?php echo $per_position; ?></i></div>
 <?php endif; ?>
 <?php if( $per_group ): ?>
-		<div class="ctc-group"><i class="fa-group icon-group"></i><i><?php echo $per_group; ?></i></div>
+	<div class="ctc-group"><i class="fa-group icon-group"></i><i><?php echo $per_group; ?></i></div>
 <?php endif; ?>
 <?php if( $per_phone ): ?>
-		<div class="ctc-phone"><i class="fa-mobile icon-mobile-phone"></i><?php echo $per_phone; ?></div>
+	<div class="ctc-phone"><i class="fa-mobile icon-mobile-phone"></i><?php echo $per_phone; ?></div>
 <?php endif; ?>
 <?php if( $per_email ): ?>
-		<div class="ctc-email"><i class="fa-envelope icon-envelope"></i><?php echo $per_email; ?></div>
+	<div class="ctc-email"><i class="fa-envelope icon-envelope"></i><?php echo $per_email; ?></div>
 <?php endif; ?>
-	</div>
+</div>
 <?php
 
 ?>

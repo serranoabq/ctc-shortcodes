@@ -1,0 +1,90 @@
+/* CTC Shortcodes stylesheet template */
+
+/* Navigation */
+.ctc-nav {
+	clear:both;
+}
+.ctc-nav .ctc-prev {}
+.ctc-nav .ctc-next {}
+.ctc-nav .disabled {
+	color: #ccc;
+}
+
+/* General terms */
+.ctc-block {
+	margin: 5px 10px 10px 0;
+	padding: 5px;
+	border: 1px solid #ccc;
+	background: #fefefe;
+}
+.ctc-block img {
+	border: 1px solid #ccc;
+	padding: 5px;
+}
+.ctc-img {
+	margin: 0 auto;
+	width: 200px;
+	display: block;
+}
+.ctc-title {
+	font-weight: bold;
+	font-size: 150%;
+}
+.ctc-phone {}
+.ctc-email {}
+.ctc-map img {
+	margin-top: 10px;
+}
+.ctc-time {}
+.ctc-address, .ctc-times {
+	text-indent: -25px;
+	margin-left: 25px;
+}
+
+/* Person */
+.ctc-person {}
+.ctc-person .ctc-title {}
+.ctc-person .ctc-phone {}
+.ctc-person .ctc-email {}
+.ctc-position {}
+.ctc-group {}
+
+/* Location */
+.ctc-location {}
+.ctc-location .ctc-title {}
+.ctc-location .ctc-phone {}
+.ctc-location .ctc-map {}
+.ctc-times {}
+.ctc-location .ctc-address {}
+
+/* Events */
+.ctc-event {}
+.ctc-event .ctc-title {}
+.ctc-event .ctc-time {}
+.ctc-event .ctc-address {}
+.ctc-event .ctc-map {}
+.ctc-date {}
+.ctc-recurrence {}
+.ctc-venue {}
+
+/* Sermons */
+.ctc-sermon {}
+.ctc-sermon .ctc-title {}
+.ctc-series {}
+.ctc-topics {}
+.ctc-tags {}
+.ctc-books {}
+.ctc-video {}
+.ctc-audio {
+	max-width: 320px;
+	margin: 20px auto;
+}
+.ctc-speaker{}
+
+.ctc-block  i[class*="fa-"], .ctc-block  i[class*="icon-"] { 
+	margin: 0 5px;
+	width: 15px;
+	display: inline-block;
+	text-align: center;
+	text-indent: 0;
+}
