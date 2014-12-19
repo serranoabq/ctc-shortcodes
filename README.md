@@ -63,12 +63,10 @@ The plugin makes available several shortcodes to expose and display the content 
 | `name`					| For taxonomy archive, it is the slug name of the taxonomy term to display. For single post shortcodes, it is the slug name of the post to display, and either this or 'id' must be specified. Defautl: `''`
 | `id`						| For single post shortcodes only. Post ID of the post to display. Either this or 'name' must be specified. Default: `''`
 			
-
-
 ###Notes:###
 1. Pagination is supported but gets complicated especially if there are multiple shortcodes on the page, all of which need pagination
 2. The `link_title` flag works best if the theme is designed to support the Church Theme Content plugin (i.e., with an appropriate post type template). Otherwise, the title link would be to a plain page which lacks the ability to display the meta data associated with the various post types.
-
+3. The display is controlled by a series of template files. An example of these is located in the `ctc-shortcodes-inc` directory within the plugin directory. These templates can be included also in the current theme. As with theme template parts, the plugin will look in the parent theme, child theme and its own directory for a template, in that order. 
 
 
 Notes

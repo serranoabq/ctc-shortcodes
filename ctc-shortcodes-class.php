@@ -89,7 +89,7 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 					$located = TEMPLATEPATH . '/' . $template_name;
 					break;
 				} else {
-					$located = $template_name; 
+					$located = dirname(__FILE__). '/' . $template_name; 
 				}
 			}
 
@@ -130,10 +130,10 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			} 
 			
 			$template_location = 'ctc-shortcodes-inc/';
-			$template = $this->ctc_locate_template( $template_location . $type );
+			$template = $this->ctc_locate_template( $template_location . $type . '.php');
 			if( empty( $template ) ) return '';
 			
-			$pag_template = $this->ctc_locate_template( $template_location . 'pagination' );
+			$pag_template = $this->ctc_locate_template( $template_location . 'pagination.php' );
 			
 			// Parse the arguments
 			extract( shortcode_atts( array(
@@ -219,12 +219,12 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			
 			$template_location = 'ctc-shortcodes-inc/';
 			$template = $this->ctc_locate_template( array( 
-				$template_location . 'tax_list', 
-				$template_location . $type  ) 
+				$template_location . 'tax_list.php', 
+				$template_location . $type . '.php' ) 
 			);
 			if( empty( $template ) ) return '';
 			
-			$pag_template = $this->ctc_locate_template( $template_location . 'pagination' );
+			$pag_template = $this->ctc_locate_template( $template_location . 'pagination.php' );
 			
 			// These are basic parameters
 			extract( shortcode_atts( array(
@@ -310,13 +310,13 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			
 			$template_location = 'ctc-shortcodes-inc/';
 			$template = $this->ctc_locate_template( array(
-				$template_location . 'tax_archive', 
-				$template_location . $type . '_tax', 
-				$template_location . $type, 
+				$template_location . 'tax_archive.php', 
+				$template_location . $type . '_tax.php', 
+				$template_location . $type . '.php', 
 			) );
 			if( empty( $template ) ) return '';
 			
-			$pag_template = $this->ctc_locate_template( $template_location . 'pagination' );
+			$pag_template = $this->ctc_locate_template( $template_location . 'pagination.php' );
 			
 			// Parse the arguments
 			extract( shortcode_atts( array(
@@ -396,8 +396,8 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			
 			$template_location = 'ctc-shortcodes-inc/';
 			$template = $this->ctc_locate_template( array( 
-				$template_location . $type, 
-				$template_location . $type . '_single', 
+				$template_location . $type . '.php', 
+				$template_location . $type . '_single.php', 
 				) );
 			if( empty( $template ) ) return '';
 			
