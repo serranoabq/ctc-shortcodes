@@ -300,8 +300,8 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 				$term_title = $term->name;
 				$term_desc = term_description( intval( $term->term_id ), $tax );
 				$term_link = get_term_link( intval( $term->term_id ), $tax ); 
-				if( function_exists( 'ctc_taxonomy_img_url' ) )
-					$thumbnail = ctc_taxonomy_img_url( intval( $term->term_id ) );
+				if( function_exists( 'ctc_tax_img_url' ) )
+					$thumbnail = ctc_tax_img_url( intval( $term->term_id ) );
 				require( $template ); 
 			}
 			if( '' != $pag_template ){ require( $pag_template ); }
