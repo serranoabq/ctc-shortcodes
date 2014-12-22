@@ -36,6 +36,9 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 			
 			// Add styles
 			add_action( 'wp_enqueue_scripts', array( &$this, 'ctc_styles' ) );
+			
+			
+			add_filter('widget_text', 'do_shortcode');
 		}
 		
 /**
@@ -497,4 +500,3 @@ if ( ! class_exists( 'CTC_Shortcodes' ) ) {
 
 	}
 }
-?>
