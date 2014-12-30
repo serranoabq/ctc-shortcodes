@@ -2,7 +2,7 @@
 /*
     Plugin Name: CTC Shortcodes
     Description: Plugin to display Church Theme Content within your theme using shortcodes. Requires <strong>Church Theme Content</strong> plugin.
-    Version: 1.0.2
+    Version: 1.0.3
     Author: Justin R. Serrano
     GitHub Plugin URI: https://github.com/serranoabq/ctc-shortcodes
     GitHub Branch:     master
